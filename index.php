@@ -52,12 +52,19 @@ parse_str(parse_url($url, PHP_URL_QUERY), $urlQuery);
             <h2>Login Form</h2>
             <form method="post" action="data.php" id="login-form">
                 <label for="login-username">Username/Email</label>
-                <input type="text" id="login-username" name="login-username" required>
+                <input type="text" id="login-username" name="login-username-or-email" required>
                 
                 <label for="login-password" >Password</label>
                 <input type="password" id="login-password" name="login-password" required>
                 
-                <button class="submit" type="submit">Login</button>
+                <button class="submit" name="login-submit" type="submit">Login</button>
+                <?php
+                if (@$urlQuery['pass'] == "incorrect") {
+                    echo '<div class="error">Password is incorrect</div>';
+                } elseif (@$urlQuery['email'] == "incorrect") {
+                    echo '<div class="error">Email is incorrect</div>';
+                } 
+                ?>
             </form>
         </div>
     </div>

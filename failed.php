@@ -16,4 +16,13 @@ if ($urlQuery['input'] == "empty") {
 } elseif ($urlQuery['pass'] == "notmatch") {
     header("location: index.php?pass=notmatch");
     exit();
+} elseif ($urlQuery['pass'] == "incorrect") {
+    header("location: index.php?pass=incorrect");
+    exit();
+} elseif ($urlQuery['email'] == "incorrect") {
+    header("location: index.php?email=incorrect");
+    exit();
+} elseif ($urlQuery['both'] == "incorrect") {
+    header("location: index.php?both=incorrect");
+    exit();
 }

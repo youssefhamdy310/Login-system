@@ -42,4 +42,64 @@ if (isset($_POST['signup-submit'])) {
         exit();
     }
     
+} elseif (isset($_POST['login-submit'])) {
+    $email = $_POST['login-username-or-email'];
+    $password = $_POST['login-password'];
+    function usernameOrEmailFound($value) {
+        include 'connect.php';
+        $db = new PDO($dsn, $user, $pass);
+        $query = $db->prepare("SELECT * FROM `users` WHERE `email` LIKE '$value' OR username LIKE '$value'");
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        if ($result !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function passwordFound($value) {
+        include 'connect.php';
+        $db = new PDO($dsn, $user, $pass);
+        $query = $db->prepare("SELECT * FROM `users` WHERE `password` LIKE '$value'");
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        if ($result !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function incorrectInputs ($value, $password) {
+        include 'connect.php';
+        $db = new PDO($dsn, $user, $pass);
+        $query = $db->prepare("SELECT * FROM `users` WHERE `email` LIKE '$value'");
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        if ($password !== $result['password']) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    if (usernameOrEmailFound($email)) {
+        if (incorrectInputs($email, $password)) {
+            header("location: failed.php?pass=incorrect");
+            exit();
+        } else {
+            header("location: home.php");
+            exit();
+        }
+    } else {
+        if (passwordFound($password)) {
+            header("location: failed.php?email=incorrect");
+            exit();
+        } else {
+            header("location: failed.php?both=incorrect");
+            exit();
+        }
+    }
+    
 }
